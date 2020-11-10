@@ -10,7 +10,7 @@ export default function FindBooks({navigation}) {
 
   const [author, setAuthor] = useState("");
   const [keyword, setKeyword] = useState("");
-  const [genre, setGenre] = useState("Adventure");
+  const [genre, setGenre] = useState("");
   const [params, setParams] = useState("");
   const [books, setBooks] = useState([]);
 
@@ -26,6 +26,7 @@ export default function FindBooks({navigation}) {
     // "Quest", "Romance", "Science Fiction", "Thriller", "Young Adult",
   ]);
 
+  useEffect(() => {findBooks();}, []);
 
   // Hakee kirjat Google Booksista
   const findBooks = () => {
@@ -48,19 +49,17 @@ export default function FindBooks({navigation}) {
       .then((response) => response.json())
       .then((responseJson) => {
         setBooks(responseJson.items)
+        console.log("Kirjat:")
+        console.log(books)
       })
-
       .catch((error) => {
         Alert.alert('Error: ', error);
       });
-
-      console.log("Kirjat:")
-      console.log(books)
     }
   }
 
 
-  // KESKEN ei toimi! Pitäskö kirjadata tallentaa kuitenkin firebaseen ja sitten vaan aina uuden haun alkaessa luoda uusi lista / tyhjentää vanha lista jos sellainen on?
+  // KESKEN, ei toimi! Pitäskö kirjadata tallentaa kuitenkin firebaseen ja sitten vaan aina uuden haun alkaessa luoda uusi lista / tyhjentää vanha lista jos sellainen on?
   const renderItem = ({ book }) => (
 
     <ListItem key={book.id} bottomDivider>
@@ -130,12 +129,12 @@ export default function FindBooks({navigation}) {
             titleStyle={{fontSize: 20}}
             onPress={findBooks}
           />
-
+{/*
           <FlatList
             data = {books}
             renderItem = {renderItem}
           />
-
+*/}
         </View>
       </ImageBackground>
       <StatusBar style="auto" />
