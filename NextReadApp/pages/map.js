@@ -1,10 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { useState, useEffect } from 'react';
 import BlankSpacer from "react-native-blank-spacer";
-import { ImageBackground, StyleSheet, FlatList, View, Alert  } from 'react-native';
+import { ImageBackground, StyleSheet, View, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Text, Button, ListItem, Icon } from 'react-native-elements';
-
+import { Text, Icon } from 'react-native-elements';
 import MapView, { PROVIDER_GOOGLE, Marker } from 'react-native-maps'
 import * as Location from 'expo-location';
 
@@ -25,20 +24,19 @@ export default function Map({navigation}) {
           Alert.alert("No permission to access location");
         } else {
           let mylocation = await Location.getCurrentPositionAsync({});
-
           setData(mylocation.coords)
+          console.log("my location set")
         }
       } catch (error) {
         Alert.alert('Error: ', error);
       }
     }
 
-    useEffect(() => {findLocation();}, []);
+    useEffect(() => {findLocation();}, [data]);
 
     // Search nearby book stores via Google Places
     const findLocation = () => {
-      console.log("Place search started")
-
+      console.log("start search")
       const googlekey = "AIzaSyCWpMbiOJD8n3ckMVORvrstAMliZJ0Cbdk"
 
       const url = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + data.latitude +","+ data.longitude + "&radius=1500&type=book_store&key=" + googlekey
@@ -63,10 +61,8 @@ export default function Map({navigation}) {
 
             resPlaces.push(place);
           }
-
         setPlaces(resPlaces);
       })
-
       .catch((error) => {
         Alert.alert('Error: ', error);
       });
@@ -136,23 +132,11 @@ const styles = StyleSheet.create({
     resizeMode: "cover",
     width: "100%",
   },
-  button: {
-    backgroundColor: "#723711",
-    width: 170,
-  },
   map: {
     flex: 1,
-    width: "80%",
+    width: "90%",
     borderColor: "gray",
     borderWidth: 1,
     borderRadius: 5,
-  },
-  textinput: {
-    width: "65%",
-    backgroundColor: '#F5F5F6',
-    borderColor: "gray",
-    borderWidth: 1,
-    margin: 5,
-    padding: 5,
   },
 });

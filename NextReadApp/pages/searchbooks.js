@@ -1,76 +1,82 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { useState, useEffect }  from 'react';
+import React, { useState }  from 'react';
 import BlankSpacer from "react-native-blank-spacer";
-import { ImageBackground, StyleSheet, View, FlatList, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { ImageBackground, StyleSheet, Keyboard, View, FlatList } from 'react-native';
 import { Text, Input, Button, Icon, ListItem } from 'react-native-elements';
-import { Picker } from '@react-native-picker/picker';
+import ModalSelector from 'react-native-modal-selector';
+
+import Genres from "./components/genres.js"
+import BookDetails from "./bookdetails.js"
+
 
 export default function FindBooks({navigation}) {
 
   const [author, setAuthor] = useState("");
   const [keyword, setKeyword] = useState("");
   const [genre, setGenre] = useState("");
-  const [params, setParams] = useState("");
+  const [note, setNote] = useState("");
   const [books, setBooks] = useState([]);
 
-  const [genreValues, setGenreValues] = useState([
-    {id:0, genre: ""},
-    {id:1, genre: "Adventure"},
-    {id:2, genre: "Action"},
-    {id:3, genre: "Historical"},
-    {id:4, genre: "Fantasy"},
+  const data = Genres();
 
-    // "Adventure", "Action", "Children's", "Crime", "Cyberpunk",
-    // "Historical", "Horror", "Fantasy", "Fiction", "Mystery","Non-Fiction", "Novel",
-    // "Quest", "Romance", "Science Fiction", "Thriller", "Young Adult",
-  ]);
 
-  useEffect(() => {findBooks();}, []);
-
-  // Hakee kirjat Google Booksista
   const findBooks = () => {
-    console.log("Book search started")
+    Keyboard.dismiss();
 
     if(keyword == "" && genre == "" && author == "") {
-    console.log("nope")
-    } else {
+    setNote("Use search inputs!") //search with nothing is not ok
 
+    } else {
+      //set up for google api search:
       const trimAuthor = author.replace(/\s+/g, '');
-      const fields = "&fields=items(id,volumeInfo(title,authors,description,categories,imageLinks))"
+      let setSubject = ""
+      if(genre !== "") {
+        setSubject = '"' + genre + '"';
+      }
+      const fields = "&fields=items(id,volumeInfo(title,authors,description,categories,imageLinks))" //restrict fields in responseJson
       const googlekey = "AIzaSyCWpMbiOJD8n3ckMVORvrstAMliZJ0Cbdk"
 
-      const url = "https://www.googleapis.com/books/v1/volumes?q=" + keyword + "+subject:" + genre + "+inauthor:" + trimAuthor + fields+ "&langRestrict=en&key=" + googlekey
-      console.log(url)
-
-      //https://www.googleapis.com/books/v1/volumes?q=+subject:+inauthor:Maas,SarahJ.&fields=items(id,volumeInfo(title,authors,description,categories,imageLinks))&langRestrict=en&key=AIzaSyCWpMbiOJD8n3ckMVORvrstAMliZJ0Cbdk
+      //url contains: user inputs, response field restictions, max number of results and language preference
+      const url = "https://www.googleapis.com/books/v1/volumes?q=" + keyword + "+subject:" + setSubject + "+inauthor:" + trimAuthor + fields + "&maxResults=15&langRestrict=en&key=" + googlekey
 
       fetch(url)
       .then((response) => response.json())
       .then((responseJson) => {
-        setBooks(responseJson.items)
-        console.log("Kirjat:")
-        console.log(books)
+        if(Object.keys(responseJson).length != 0 ) {
+          setBooks(responseJson.items)
+          setNote("")
+        } else {
+          setNote("No Books. Try another search.")
+        }
       })
       .catch((error) => {
-        Alert.alert('Error: ', error);
+        console.log(error);
+        console.log("Error. Try another search.");
       });
     }
   }
 
-
-  // KESKEN, ei toimi! Pitäskö kirjadata tallentaa kuitenkin firebaseen ja sitten vaan aina uuden haun alkaessa luoda uusi lista / tyhjentää vanha lista jos sellainen on?
-  const renderItem = ({ book }) => (
-
-    <ListItem key={book.id} bottomDivider>
-      {console.log(book)}
-      <ListItem.Content>
-        <ListItem.Title> {book.volumeInfo.title} </ListItem.Title>
-        {/* <ListItem.Subtitle> {book.authors} </ListItem.Subtitle> */}
-      </ListItem.Content>
-      {/* <ListItem.Chevron name="favorite"/> */}
-    </ListItem>
-  )
+// renderItem constructs the list of books. If statement skips books that have no author or category (genre) => fixes app crash
+  const renderItem = ({ item }) => {
+    if(item.volumeInfo.hasOwnProperty("authors") === true && item.volumeInfo.hasOwnProperty("categories") === true){
+      return(
+        <ListItem
+          key={item.id}
+          bottomDivider
+          containerStyle= {{backgroundColor:"rgba(114, 55, 17, .4)",}}
+          onPress={() => navigation.navigate('Book Details', item)}
+        >
+          <ListItem.Content>
+            <ListItem.Title style={{fontSize: 18, color:"#CDCDCD"}}> {item.volumeInfo.title} </ListItem.Title>
+            {item.volumeInfo.authors.map((author, index) => (
+              <ListItem.Subtitle key={index} style={{color:"#CDCDCD"}}> {author} </ListItem.Subtitle>
+            ))}
+          </ListItem.Content>
+          <ListItem.Chevron name="more-horiz" type= "material"/>
+        </ListItem>
+      )}
+  }
 
   return (
     <SafeAreaView style={styles.safecontainer}>
@@ -87,6 +93,7 @@ export default function FindBooks({navigation}) {
 
         <View style={styles.container}>
           <Text h2 h2Style={{color:"#F5F5F6"}}>Find new books!</Text>
+
           <BlankSpacer height={10} />
           <Input
             label={"Author"}
@@ -101,7 +108,7 @@ export default function FindBooks({navigation}) {
           <Input
             label={"Free Search"}
             placeholder = {"Key word"}
-            containerStyle={{ width: '68%', marginBottom: -15 }}
+            containerStyle={{ width: '68%', marginBottom: -10 }}
             labelStyle={{color:"white", marginLeft: 5}}
             inputStyle = {styles.textinput}
             clearButtonMode = "always"
@@ -109,32 +116,32 @@ export default function FindBooks({navigation}) {
             onChangeText = {keyword => setKeyword(keyword)}
             value = {keyword}
           />
-
-          <Picker
-            selectedValue={genre}
-            style={{width:200}}
-            itemStyle={{backgroundColor: "rgba(114, 55, 17, .3)", color: "white", borderRadius: 25,}}
-            onValueChange={(itemValue, itemIndex) =>
-                setGenre(itemValue)}
-          >
-            {genreValues.map((item) => {
-              return <Picker.Item label={item.genre} value={item.genre} key={item.id} />
-            })}
-          </Picker>
+          <ModalSelector data={data} optionTextStyle={{color: "#723711"}} onChange={option => {setGenre(option.label)}}>
+            <Input
+              inputStyle={{color:"black", fontSize: 17, textAlign:"center",}}
+              containerStyle={styles.picker}
+              editable={false}
+              placeholder="Select Genre"
+              value={genre}
+            />
+          </ModalSelector>
 
           <BlankSpacer height={10} />
           <Button
             title="Find books"
             buttonStyle={styles.button}
             titleStyle={{fontSize: 20}}
-            onPress={findBooks}
+            onPress={() => findBooks()}
           />
-{/*
+
+          <BlankSpacer height={10} />
+          <Text style={{color:"white", marginBottom: 5}}>{note}</Text>
           <FlatList
             data = {books}
             renderItem = {renderItem}
+            extraData = {note}
+            style = {{width:"100%"}}
           />
-*/}
         </View>
       </ImageBackground>
       <StatusBar style="auto" />
@@ -166,12 +173,11 @@ const styles = StyleSheet.create({
     width: 170,
   },
   picker: {
-    height: 40,
-    width: 200,
-    color: "white",
+    width: 120,
+    height: 42,
     backgroundColor: '#F5F5F6',
     borderColor: "gray",
-    borderWidth: 2,
+    borderWidth: 1,
     borderRadius: 5,
   },
   textinput: {

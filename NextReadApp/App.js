@@ -7,9 +7,12 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import FindBooks from "./pages/searchbooks.js"
-import WishList from "./pages/wishlist.js"
-import Map from "./pages/map.js"
+import FindBooks from "./pages/searchbooks.js";
+import WishList from "./pages/wishlist.js";
+import Map from "./pages/map.js";
+import BookDetails from "./pages/bookdetails.js";
+import AddWish from "./pages/components/addtowishlist.js";
+import WishListDetails from "./pages/wishdetails.js";
 
 const Stack = createStackNavigator();
 
@@ -67,8 +70,23 @@ export default function App() {
           options= {{headerShown: false}}
         />
         <Stack.Screen
+          name="Book Details"
+          component={BookDetails}
+          options= {{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Add Wish"
+          component={AddWish}
+          options= {{headerShown: false}}
+        />
+        <Stack.Screen
           name="Wish List"
           component={WishList}
+          options= {{headerShown: false}}
+        />
+        <Stack.Screen
+          name="Wish Details"
+          component={WishListDetails}
           options= {{headerShown: false}}
         />
 
