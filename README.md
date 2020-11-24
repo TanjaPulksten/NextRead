@@ -11,17 +11,9 @@ Next steps to further develop this app would be to add a list for books already 
 
 Here are some screenshots and explanations from the end result. 
 
-<table>
-<tr>
-<td valign="top" width="50%">
-![Front Page](https://github.com/TanjaPulksten/NextRead/blob/main/NextReadApp/pages/images/UI-1.PNG)
-</td>
-    
-<td valign="top" width="50%">
-![Map](https://github.com/TanjaPulksten/NextRead/blob/main/NextReadApp/pages/images/UI-4.PNG)
-</td>
-</tr>
-</table>
+
+![Front Page](https://github.com/TanjaPulksten/NextRead/blob/main/NextReadApp/pages/images/UI-1.PNG) ![Map](https://github.com/TanjaPulksten/NextRead/blob/main/NextReadApp/pages/images/UI-4.PNG)
+
 
 
 ![Book Serach](https://github.com/TanjaPulksten/NextRead/blob/main/NextReadApp/pages/images/UI-2.0.PNG)
