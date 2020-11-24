@@ -3,7 +3,7 @@ This is a project for mobile programming course.
 
 I chose to build an app for avid readers to find new interesting books and a place to store a wish list of them. The app also has a map function to locate nearest bookstores. 
 
-I first planned the app and it's functions in writing and then made a clickable prototype of it with Axure RP. The proto can be found [here](https://4eozz1.axshare.com/)
+I first planned the app and it's functions in writing and then made a clickable prototype of it with Axure RP. The proto can be found [here](https://4eozz1.axshare.com/).
 
 The project uses React Native Elements and multiple useful Expo modules. Books are fetched from Google Books API and saved to a Firebase Real Time Database. 
 
