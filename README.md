@@ -23,4 +23,8 @@ Wish List fetches saved books from Firebase and lists them. There is a Modal Sel
 
 ![WishList](https://github.com/TanjaPulksten/NextRead/blob/main/NextReadApp/pages/images/UI-3.0.PNG) ![Sort WishList](https://github.com/TanjaPulksten/NextRead/blob/main/NextReadApp/pages/images/UI-3.1.PNG)
 
+<<<<<<< HEAD
 Next steps to further develop this app would be to add a list for books already read and opportunity to change the rating after reading. And then it would be great to have recommendations based on read books with good ratings.
+=======
+Next steps to further develop this app would be to add a list for books already read and opportunity to change the rating after reading. And then it would be great to have recommendations based on read books with good ratings.
+>>>>>>> 6177aeb02f5ca8f5faa9bfec66b3410d020e9076
