@@ -14,3 +14,5 @@ Here are some screenshots and explanations from the end result.
 ![Front Page](https://github.com/TanjaPulksten/NextRead/blob/main/NextReadApp/pages/images/UI-1.PNG)
 
 ![Map](https://github.com/TanjaPulksten/NextRead/blob/main/NextReadApp/pages/images/UI-4.PNG)
+
+![Book Serach](https://github.com/TanjaPulksten/NextRead/blob/main/NextReadApp/pages/images/UI-2.0.PNG)
