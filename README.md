@@ -9,4 +9,6 @@ Naturally the end result is not an exact copy of the prototype, but all the func
 
 Next steps to further develop this app would be to add a list for books already read and opportunity to rate them. And then it would be great to have recommendations based on read books with good ratings. 
 
-Here are some screenshots from the end result. 
+Here are some screenshots and explanations from the end result. 
+
+![Front Page](relative/path/to/UI-1.png)
